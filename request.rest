@@ -32,7 +32,6 @@ Content-Type: application/json
 
 {
     "owner":"queennnnnn !!!",
-    "title": "im the queennn",
     "content": "blablabla"
 }
 ###
@@ -41,7 +40,6 @@ Content-Type: application/json
 
 {
     "owner":"linoyoshsss",
-    "title": "The best post",
     "content": "blablabla"
 }
 ###
