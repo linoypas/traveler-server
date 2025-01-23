@@ -9,3 +9,4 @@ router.post('/posts',postsContoller.addPost);
 router.put('/posts/:post_id',postsContoller.updatePost);
 
 module.exports = router;
+
