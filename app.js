@@ -19,6 +19,8 @@ db.once("open",function (){
 });
 
 app.use("/",require("./routes/posts"))
+app.use("/",require("./routes/comments"))
+
 
 app.listen(port, () => {
     console.log(`App is listening at https://localhost:${port}`);
