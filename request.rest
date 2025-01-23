@@ -4,7 +4,7 @@ GET http://localhost:3000/posts?owner=lina
 ###
 GET http://localhost:3000/posts/67929b65e07c754b7965c9c8
 ###
-GET http://localhost:3000/posts/67929b65e07c754b7965c9c8/comments/675c8a1cf17688ace315ddeb
+GET http://localhost:3000/posts/67929b65e07c754b7965c9c8/comments/6792aaeefdce01c83651ea88
 ###
 
 GET http://localhost:3000/posts/67929b65e07c754b7965c9c8/comments
@@ -13,7 +13,7 @@ POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
-    "owner":"noa",
+    "owner":"lina",
     "title": "The best post",
     "content": "blablabla"
 }
@@ -36,7 +36,7 @@ Content-Type: application/json
     "content": "blablabla"
 }
 ###
-PUT http://localhost:3000/posts/674758890a52419e01d53f40/comments/675c8a1cf17688ace315ddeb
+PUT http://localhost:3000/posts/67929b65e07c754b7965c9c8/comments/6792aaeefdce01c83651ea88
 Content-Type: application/json
 
 {
@@ -45,7 +45,7 @@ Content-Type: application/json
     "content": "blablabla"
 }
 ###
-DELETE http://localhost:3000/posts/674758940a52419e01d53f44
+DELETE http://localhost:3000/posts/67929b65e07c754b7965c9c8
 
 ###
-DELETE http://localhost:3000/posts/674758890a52419e01d53f40/comments/675c8a1bf17688ace315dde8
+DELETE http://localhost:3000/posts/67929b65e07c754b7965c9c8/comments/6792aaeefdce01c83651ea88

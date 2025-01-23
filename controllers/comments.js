@@ -14,7 +14,7 @@ const addComment = async (req, res) => {
                 content: req.body.content,
                 post: post_id
             });
-            return res.status(201).send(post);
+            return res.status(201).send(comment);
         }
     } catch (err) {
         return res.status(400).send(err);
