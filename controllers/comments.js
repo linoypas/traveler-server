@@ -21,6 +21,45 @@ const addComment = async (req, res) => {
     }
 };
 
+const getCommentById = async (req,res) => {
+    try{
+        const comment_id=req.params.comment_id;
+        const post_id=req.params.post_id;
+        const post = await Posts.findById(post_id);
+        if(!post){
+            return res.status(404).send("Post not found");
+        } else{
+            const comment = await Comments.findById(comment_id);
+            if(!comment){
+                return res.status(404).send("Comment not found");
+            } else{
+                return res.status(200).send(comment);
+            }
+        }
+    } catch (err){
+        return res.status(400).send(err);
+    }
+};
+
+const deleteComment = async (req,res) => {
+    try{
+        const post_id=req.params.post_id;
+        const comment_id=req.params.comment_id;
+        const post = await Posts.findById(post_id);
+        if(!post)
+            return res.status(404).send("Post not found");
+        else{
+            const comment = await Comments.findByIdAndDelete(comment_id);
+            if(!comment){
+                return res.status(404).send("Comment not found");
+            } else{
+                return res.status(201).send(comment);
+            } 
+        }
+    } catch (err) {
+        return res.status(400).send(err);
+    }
+};
 const getComments = async (req,res) => {
     try{
         const post_id=req.params.post_id;
@@ -65,5 +104,7 @@ const updateComment = async (req,res) => {
 module.exports = {
     addComment,
     getComments,
-    updateComment
+    updateComment,
+    deleteComment,
+    getCommentById
 }

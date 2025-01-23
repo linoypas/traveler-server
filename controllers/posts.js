@@ -15,6 +15,32 @@ const getPosts = async (req,res) => {
     }
 };
 
+const addPost = async (req,res) => {
+    try{
+        const post = await Posts.create(req.body);
+        return res.status(201).send(post);
+    } catch (err){
+        return res.status(400).send(err);
+    }
+};
+
+const updatePost = async(req,res) => {
+    const post_id=req.params.post_id;
+    try {
+        const post = await Posts.findById(post_id);
+        if (post) {
+            post.owner = req.body.owner;
+            post.title = req.body.title;
+            post.content = req.body.content;
+            post.save();
+            return res.status(201).send(post);
+        } else {
+            return res.status(404).send("Page not found");
+        }
+    } catch (err) {
+        return res.status(400).send(err);
+    }
+};
 
 const deletePost = async (req,res) => {
     const post_id=req.params.post_id;
@@ -49,5 +75,7 @@ const getPostById = async (req,res) => {
 module.exports = {
     getPosts,
     deletePost,
-    getPostById
+    getPostById,
+    addPost,
+    updatePost
 }
