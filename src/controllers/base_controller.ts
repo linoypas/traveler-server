@@ -1,75 +1,63 @@
-// import { Model } from 'mongoose';
-// import Posts from '../models/posts';
-// import { Request, Response } from 'express';
 
-// class BaseController<T> {
-//     model: Model<T>;
-//     constructor(model: Model<T>) {
-//         this.model=model;
-// }
-// async create(req: Request, res: Response) {
-//     try {
-//         const item = await this.model.create(req.body);
-//         return res.status(200).send(item);
-//     } catch (err) {
-//         return res.status(400).send(err);
-//     }
-// };
-// async delete(req: Request, res: Response){
-//     try{
-//         const item = await this.model.findByIdAndDelete(req.params.id);
-//         return res.status(200).send(item);
-//     } catch (err) {
-//         return res.status(400).send(err);
-//     }
-// };
+import { Request, Response } from "express";
+import { Model } from "mongoose";
 
-// async getById(req: Request, res: Response){
-//     try{
-//         const item = await this.model.findById(req.params.id);
-//         return res.status(200).send(item);
-//     } catch (err){
-//         return res.status(400).send(err);
-//     }
-// };
-// const getAll = async (req: Request, res: Response) => {
-//     const filter=req.query.owner
-//     try{
-//         if (filter) {
-//             const item = await this.model.find({ owner: filter });
-//             res.send(item);
-//         } else {
-//             const items = await this.model.find();
-//             res.send(items);
-//         }
-//     } catch (err){
-//         return res.status(400).send(err);
-//     }
-// };
+class BaseController<T> {
+  model: Model<T>;
 
-// async update(req: Request, res: Response){
-//     try {
-//         const item = await this.model.findById(req.params.id);
-//         if (item) {
-//             item.owner = req.body.owner;
-//             item.title = req.body.title;
-//             item.content = req.body.content;
-//             item.save();
-//             return res.status(200).send(item);
-//         } else {
-//             return res.status(404).send("not found");
-//         }
-//     } catch (err) {
-//         return res.status(400).send(err);
-//     }
-// };
+  constructor(model: Model<T>) {
+    this.model = model;
+  }
 
+  async getAll(req: Request, res: Response) {
+    const filter = req.query.owner;
+    try {
+      if (filter) {
+        const posts = await this.model.find({ owner: filter });
+        res.send(posts);
+      } else {
+        const posts = await this.model.find();
+        res.send(posts);
+      }
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
 
+  async getById(req: Request, res: Response) {
+    const postId = req.params.id;
 
-// export default {
-//     addComment,
-//     getComments,
-//     updateComment,
-//     deleteComment,
-//     getCommentById
-// }
+    try {
+      const post = await this.model.findById(postId);
+      if (post != null) {
+        res.send(post);
+      } else {
+        res.status(404).send("Post not found");
+      }
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
+  async createItem(req: Request, res: Response) {
+    const postBody = req.body;
+    try {
+      const post = await this.model.create(postBody);
+      res.status(201).send(post);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
+  async deleteItem(req: Request, res: Response) {
+    const postId = req.params.id;
+    try {
+      const rs = await this.model.findByIdAndDelete(postId);
+      res.status(200).send(rs);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+}
+
+export default BaseController;
