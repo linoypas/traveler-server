@@ -56,7 +56,7 @@ const login = async (req: Request, res: Response) => {
   try {
     const user = await userModel.findOne({ email: req.body.email });
     if (!user) {
-      res.status(400).send("wrong username or password");
+      res.status(403).send("wrong username or password");
       return;
     }
     const validPassword = await bcrypt.compare(
@@ -64,7 +64,7 @@ const login = async (req: Request, res: Response) => {
       user.password
     );
     if (!validPassword) {
-      res.status(400).send("wrong username or password");
+      res.status(403).send("wrong username or password");
       return;
     }
     if (!process.env.TOKEN_SECRET) {
@@ -73,10 +73,12 @@ const login = async (req: Request, res: Response) => {
     }
     // generate token
     const tokens = generateToken(user._id);
+
     if (!tokens) {
       res.status(500).send("Server Error");
       return;
     }
+
     if (!user.refreshToken) {
       user.refreshToken = [];
     }
