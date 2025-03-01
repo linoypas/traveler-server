@@ -6,7 +6,6 @@ class PostsController extends BaseController<IPost> {
   constructor() {
     super(postModel);
   }
-
   async create(req: Request, res: Response) {
     const userId = req.params.userId;
     const post = {

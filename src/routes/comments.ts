@@ -56,7 +56,7 @@ import authMiddleware from "../common/auth_middleware";
  *       '500':
  *         description: Internal server error
  */
-router.get("/", commentsController.getAll.bind(commentsController));
+router.get("/", (req, res) => commentsController.getAll(req, res, "postId"));
 
 
 /**

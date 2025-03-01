@@ -53,7 +53,7 @@ import authMiddleware from "../common/auth_middleware";
  *       '500':
  *         description: Internal server error
  */
-router.get("/", postsController.getAll.bind(postsController));
+router.get("/", (req, res) => postsController.getAll(req, res));
 
 /**
  * @swagger

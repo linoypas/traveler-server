@@ -6,7 +6,7 @@ type Payload = {
 };
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const authorization = req.header("authorization");
+  const authorization = req.header("Authorization");
 
   const token = authorization && authorization.split(" ")[1];
   if (!token) {
