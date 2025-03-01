@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import commentsController from "../controllers/comments";
+import authMiddleware from "../common/auth_middleware";
 
 /**
 * @swagger
@@ -117,7 +118,7 @@ router.get("/:id", commentsController.getById.bind(commentsController));
  *       '500':
  *         description: Internal server error
  */
-router.post("/", commentsController.createItem.bind(commentsController));
+router.post("/", authMiddleware, commentsController.create.bind(commentsController));
 
 /**
  * @swagger
