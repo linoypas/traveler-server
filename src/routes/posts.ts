@@ -114,7 +114,7 @@ router.get("/:id", postsController.getById.bind(postsController));
  *       '500':
  *         description: Internal server error
  */
-router.post("/", authMiddleware, postsController.create.bind(postsController));
+ router.post("/" ,postsController.create.bind(postsController));
 
 /**
  * @swagger
