@@ -82,7 +82,7 @@ router.get("/", postsController.getAll.bind(postsController));
  *       '500':
  *         description: Internal server error
  */
-router.get("/:id", postsController.getById.bind(postsController));
+router.get("/",authMiddleware ,postsController.getById.bind(postsController));
 
 /**
  * @swagger

@@ -8,8 +8,7 @@ class PostsController extends BaseController<IPost> {
   }
 
   async create(req: Request, res: Response) {
-    const userId = "67c218719d6efca5a2ed6bca";
-    //req.params.userId;
+    const userId = req.params.userId;
     const post = {
       ...req.body,
       owner: userId,
