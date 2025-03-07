@@ -82,7 +82,7 @@ router.get("/", (req, res) => postsController.getAll(req, res));
  *       '500':
  *         description: Internal server error
  */
-router.get("/:id", postsController.getById.bind(postsController));
+// router.get("/:id", postsController.getById.bind(postsController));
 
 /**
  * @swagger
@@ -154,6 +154,9 @@ router.put(
   authMiddleware,
   postsController.updateItem.bind(postsController)
 );
+
+router.get('/getAi', postsController.getAi.bind(postsController));
+
 
 
 export default router;
