@@ -24,7 +24,6 @@ const post = new Schema<IPost>({
     likes: { 
       type: [String], 
       default: [],
-      unique: true,
     },
 
     });

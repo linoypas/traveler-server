@@ -11,6 +11,31 @@ import authMiddleware from "../common/auth_middleware";
 
 /**
  * @swagger
+ * /posts/getAi:
+ *   delete:
+ *     summary: Generate post by OpenAi
+ *     description: generats a post by OpenAi
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: prompt
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The prompt for the post
+ *     responses:
+ *       '200':
+ *         description: Post created successfully
+ *       '500':
+ *         description: Internal server error
+ */
+router.get('/getAi', postsController.getAi.bind(postsController));
+
+/**
+ * @swagger
  * components:
  *   schemas:
  *     Post:
@@ -143,17 +168,36 @@ router.post("/", authMiddleware, postsController.create.bind(postsController));
  *       '500':
  *         description: Internal server error
  */
-router.delete(
-  "/:id",
-  authMiddleware,
-  postsController.deleteItem.bind(postsController)
-);
+router.delete("/:id", authMiddleware, postsController.deleteItem.bind(postsController));
 
-router.put(
-  "/:id",
-  authMiddleware,
-  postsController.updateItem.bind(postsController)
-);
+/**
+ * @swagger
+ * /posts/{id}:
+ *   put:
+ *     summary: update post by ID
+ *     description: Updates a post by its ID
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The post ID
+ *     responses:
+ *       '200':
+ *         description: Post updated successfully
+ *       '401':
+ *         description: Unauthorized
+ *       '404':
+ *         description: Post not found
+ *       '500':
+ *         description: Internal server error
+ */
 
+router.put( "/:id", authMiddleware, postsController.updateItem.bind(postsController));
 
 export default router;
