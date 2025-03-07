@@ -149,4 +149,11 @@ router.delete(
   postsController.deleteItem.bind(postsController)
 );
 
+router.put(
+  "/:id",
+  authMiddleware,
+  postsController.updateItem.bind(postsController)
+);
+
+
 export default router;

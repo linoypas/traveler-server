@@ -50,11 +50,32 @@ class BaseController<T> {
       const item = await this.model.create(itemBody);
       res.status(201).send(item);
     } catch (error) {
-      console.log(error);
       res.status(400).send(error);
     }
   }
 
+  async updateItem(req: Request, res: Response) {
+    const itemBody = req.body;
+    const itemId = req.params.id;
+    try {
+      const item = await this.model.findById(itemId);
+      if (item != null) {
+        for (const key in itemBody) {
+          if (itemBody.hasOwnProperty(key)) {
+            item[key] = itemBody[key]; 
+          }
+        }
+        await item.save();
+        res.status(200).send(item);
+      } else {
+          res.status(404).send("item not found");
+      }   
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  }
+  
   async deleteItem(req: Request, res: Response) {
     const itemId = req.params.id;
     try {
