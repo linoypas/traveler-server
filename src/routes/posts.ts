@@ -82,7 +82,7 @@ router.get("/", postsController.getAll.bind(postsController));
  *       '500':
  *         description: Internal server error
  */
-router.get("/",authMiddleware ,postsController.getById.bind(postsController));
+router.get("/:id" ,postsController.getById.bind(postsController));
 
 /**
  * @swagger
@@ -114,7 +114,7 @@ router.get("/",authMiddleware ,postsController.getById.bind(postsController));
  *       '500':
  *         description: Internal server error
  */
- router.post("/" ,postsController.create.bind(postsController));
+ router.post("/" ,authMiddleware,postsController.create.bind(postsController));
 
 /**
  * @swagger
