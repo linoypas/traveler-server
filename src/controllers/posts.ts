@@ -22,9 +22,7 @@ class PostsController extends BaseController<IPost> {
       image: image,
       owner: userId, 
     });
-   // req.body = post;
     console.log(newPost)
-   // super.createItem(req, res);
    await newPost.save();
 
   }
