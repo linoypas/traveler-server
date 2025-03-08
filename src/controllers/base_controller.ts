@@ -9,30 +9,34 @@ class BaseController<T> {
     this.model = model;
   }
 
-  async getAll(req: Request, res: Response) {
-    const filter = req.query.owner;
+  async getAll(req: Request, res: Response, filterField?: String) {
+    if(!filterField){
+      filterField = "owner";
+    }
+    const filter = req.query[filterField as string];    
     try {
       if (filter) {
-        const posts = await this.model.find({ owner: filter });
-        res.send(posts);
+        const items = await this.model.find({ [filterField as any]: filter });
+        res.send(items);
       } else {
-        const posts = await this.model.find();
-        res.send(posts);
+        const items = await this.model.find();
+        res.send(items);
       }
+
     } catch (error) {
       res.status(400).send(error);
     }
   }
 
   async getById(req: Request, res: Response) {
-    const postId = req.params.id;
+    const itemId = req.params.id;
 
     try {
-      const post = await this.model.findById(postId);
-      if (post != null) {
-        res.send(post);
+      const item = await this.model.findById(itemId);
+      if (item != null) {
+        res.send(item);
       } else {
-        res.status(404).send("Post not found");
+        res.status(404).send("item not found");
       }
     } catch (error) {
       res.status(400).send(error);
@@ -40,19 +44,42 @@ class BaseController<T> {
   }
 
   async createItem(req: Request, res: Response) {
-    const postBody = req.body;
+    const itemBody = req.body;
     try {
-      const post = await this.model.create(postBody);
-      res.status(201).send(post);
+      const item = await this.model.create(itemBody);
+      res.status(201).send(item);
     } catch (error) {
+      console.log(error);
       res.status(400).send(error);
     }
   }
 
-  async deleteItem(req: Request, res: Response) {
-    const postId = req.params.id;
+  async updateItem(req: Request, res: Response) {
+    const itemBody = req.body;
+    const itemId = req.params.id;
     try {
-      const rs = await this.model.findByIdAndDelete(postId);
+      const item = await this.model.findById(itemId);
+      if (item != null) {
+        for (const key in itemBody) {
+          if (itemBody.hasOwnProperty(key)) {
+            item[key] = itemBody[key]; 
+          }
+        }
+        await item.save();
+        res.status(200).send(item);
+      } else {
+          res.status(404).send("item not found");
+      }   
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  }
+  
+  async deleteItem(req: Request, res: Response) {
+    const itemId = req.params.id;
+    try {
+      const rs = await this.model.findByIdAndDelete(itemId);
       res.status(200).send(rs);
     } catch (error) {
       res.status(400).send(error);
