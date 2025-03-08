@@ -177,7 +177,7 @@ router.post("/refresh", authController.refresh);
 
 /**
  * @swagger
- * /users/{userId}:
+ * /auth/{userId}:
  *   get:
  *     summary: Get a user by ID
  *     tags: [Users]
