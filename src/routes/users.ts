@@ -66,7 +66,7 @@ import userController from "../controllers/user";
 */
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, "profile-pictures"); // Save to profile-pictures folder
+      cb(null, "profile-pictures");
     },
     filename: (req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`);
