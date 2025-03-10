@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
-import usersController from "../controllers/users";
+import authController from "../controllers/auth";
+import userController from "../controllers/user";
 
 
 /**
@@ -61,7 +62,7 @@ import usersController from "../controllers/users";
 *             schema:
 *               $ref: '#/components/schemas/User'
 */
-router.post("/register", usersController.register);
+router.post("/register", authController.register);
 
 
 /**
@@ -100,7 +101,7 @@ router.post("/register", usersController.register);
  *       '500':
  *         description: Internal server error
  */
-router.post("/login", usersController.login);
+router.post("/login", authController.login);
 
 
 /**
@@ -131,7 +132,7 @@ router.post("/login", usersController.login);
  *       '500':
  *         description: Internal server error
  */
-router.post("/logout", usersController.logout);
+router.post("/logout", authController.logout);
 
 /**
  * @swagger
@@ -172,6 +173,33 @@ router.post("/logout", usersController.logout);
  *       '500':
  *         description: Internal server error
  */
-router.post("/refresh", usersController.refresh);
+router.post("/refresh", authController.refresh);
+
+/**
+ * @swagger
+ * /auth/{userId}:
+ *   get:
+ *     summary: Get a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: The user ID to fetch the user
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id" ,userController.getById.bind(userController));
 
 export default router;

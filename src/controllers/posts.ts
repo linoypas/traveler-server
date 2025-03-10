@@ -18,6 +18,7 @@ class PostsController extends BaseController<IPost> {
       owner: userId,
     };
     req.body = post;
+    console.log(post)
     super.createItem(req, res);
   }
 
