@@ -214,4 +214,6 @@ router.post("/refresh", authController.refresh);
  */
 router.get("/:id" ,userController.getById.bind(userController));
 
+router.put("/:id", upload.single("image"), userController.updateItem.bind(userController));
+
 export default router;
