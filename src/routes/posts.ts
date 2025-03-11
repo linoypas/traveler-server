@@ -144,7 +144,7 @@ router.get("/:id" ,postsController.getById.bind(postsController));
  */
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "uploads/"); // Save images in 'uploads/' directory
+      cb(null, "uploads/");
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + "-" + file.originalname);

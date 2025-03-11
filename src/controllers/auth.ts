@@ -3,15 +3,28 @@ import userModel, { IUser } from "../models/users";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Document } from "mongoose";
+import multer from "multer";
+import path from "path";
+import fs from 'fs';
+
+const uploadDir = path.join(__dirname, '../profile-pictures');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const register = async (req: Request, res: Response) => {
   try {
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    const image = (req as any).file ? `/profile-pictures/${(req as any).file.filename}` : "/profile-pictures/default.png";
+
     const user = await userModel.create({
       email: req.body.email,
+      username: req.body.username,
       password: hashedPassword,
+      image: image,
     });
     res.status(200).send(user);
   } catch (err) {
@@ -71,7 +84,6 @@ const login = async (req: Request, res: Response) => {
       res.status(500).send("Server Error");
       return;
     }
-    // generate token
     const tokens = generateToken(user._id);
 
     if (!tokens) {
@@ -104,7 +116,6 @@ type tUser = Document<unknown, object, IUser> &
 
 const verifyRefreshToken = (refreshToken: string | undefined) => {
   return new Promise<tUser>((resolve, reject) => {
-    //get refresh token from body
     if (!refreshToken) {
       reject("fail");
       return;
@@ -125,7 +136,6 @@ const verifyRefreshToken = (refreshToken: string | undefined) => {
         //get the user id fromn token
         const userId = payload._id;
         try {
-          //get the user form the db
           const user = await userModel.findById(userId);
           if (!user) {
             reject("fail");
@@ -191,7 +201,7 @@ const refresh = async (req: Request, res: Response) => {
 };
 
 export default {
-  register,
+  register, 
   login,
   refresh,
   logout,

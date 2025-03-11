@@ -1,4 +1,6 @@
 import express from "express";
+import multer from "multer";
+import path from "path";
 const router = express.Router();
 import authController from "../controllers/auth";
 import userController from "../controllers/user";
@@ -62,7 +64,17 @@ import userController from "../controllers/user";
 *             schema:
 *               $ref: '#/components/schemas/User'
 */
-router.post("/register", authController.register);
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "profile-pictures");
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    }
+  });
+  
+  const upload = multer({ storage });
+router.post("/register", upload.single("image"), authController.register);
 
 
 /**
