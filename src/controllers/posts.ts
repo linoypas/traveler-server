@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import BaseController from "./base_controller";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import multer from "multer";
 
 dotenv.config();
 
@@ -13,13 +14,19 @@ class PostsController extends BaseController<IPost> {
 
   async create(req: Request, res: Response) {
     const userId = req.params.userId;
-    const post = {
-      ...req.body,
-      owner: userId,
-    };
-    req.body = post;
-    console.log(post)
-    super.createItem(req, res);
+    const image = (req as any).file ? `/uploads/${(req as any).file.filename}` : null;
+    const { title, content } = req.body;
+    const newPost = new postModel({
+      title: title,
+      content: content,
+      image: image,
+      owner: userId, 
+    });
+   // req.body = post;
+    console.log(newPost)
+   // super.createItem(req, res);
+   await newPost.save();
+
   }
 
   async getAi(req: Request, res: Response) {

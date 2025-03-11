@@ -2,6 +2,9 @@ import express from "express";
 const router = express.Router();
 import postsController from "../controllers/posts";
 import authMiddleware from "../common/auth_middleware";
+import uploadMiddleware from "../common/upload_middleware";
+import multer from "multer";
+
 /**
 * @swagger
 * tags:
@@ -139,7 +142,23 @@ router.get("/:id" ,postsController.getById.bind(postsController));
  *       '500':
  *         description: Internal server error
  */
- router.post("/" ,authMiddleware,postsController.create.bind(postsController));
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/"); // Save images in 'uploads/' directory
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + "-" + file.originalname);
+    },
+  });
+  
+  const upload = multer({ storage: storage });
+
+  router.post(
+    "/",
+    authMiddleware, // Authorization middleware
+    upload.single("image"), // Middleware to handle image file upload
+    postsController.create.bind(postsController) // Controller to handle the creation logic
+  );
 
 /**
  * @swagger
@@ -199,5 +218,6 @@ router.delete("/:id", authMiddleware, postsController.deleteItem.bind(postsContr
  */
 
 router.put( "/:id", authMiddleware, postsController.updateItem.bind(postsController));
+
 
 export default router;
