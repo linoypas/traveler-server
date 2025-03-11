@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export interface IComment {
   content: string;
-  owner: string;
+  owner: mongoose.Schema.Types.ObjectId;
   postId: string;
 }
 
@@ -12,7 +12,8 @@ const commentSchema = new mongoose.Schema<IComment>({
     required: true,
   },
   owner: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Users',
     required: true,
   },
   postId: {

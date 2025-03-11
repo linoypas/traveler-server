@@ -17,16 +17,5 @@ const uploadMiddleware = multer({
     limits: { fileSize: 50 * 1024 * 1024 }, 
   });
 
-const fileFilter = (req: Request, file: any, cb: FileFilterCallback) => {
-    if (file.mimetype.startsWith("image/")) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only images are allowed"));
-    }
-  };
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 50 * 1024 * 1024 },
-});
 
 export default uploadMiddleware;
