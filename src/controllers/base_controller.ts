@@ -16,10 +16,10 @@ class BaseController<T> {
     const filter = req.query[filterField as string];    
     try {
       if (filter) {
-        const items = await this.model.find({ [filterField as any]: filter });
+        const items = await this.model.find({ [filterField as any]: filter }).populate('owner', 'username');
         res.send(items);
       } else {
-        const items = await this.model.find();
+        const items = await this.model.find().populate('owner', 'username');
         res.send(items);
       }
 
@@ -32,7 +32,7 @@ class BaseController<T> {
     const itemId = req.params.id;
 
     try {
-      const item = await this.model.findById(itemId);
+      const item = await this.model.findById(itemId).populate('owner', 'username');
       if (item != null) {
         res.send(item);
       } else {

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 export interface IPost {
     title: string;
     content: string;
-    owner: string;
+    owner: mongoose.Schema.Types.ObjectId;
     likes: string[];
     image?: string;
 }
@@ -12,8 +12,11 @@ export interface IPost {
 const post = new Schema<IPost>({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  owner: { type: String, required: true },
-  likes: { type: [String], default: [] },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Users',
+    required: true,
+  },  likes: { type: [String], default: [] },
   image: { type: String },  
 });
 
