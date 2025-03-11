@@ -55,7 +55,7 @@ class UserController extends BaseController<IUser> {
         _id: user._id,
         email: user.email,
         username: user.username,
-        image: user.image ? `/profile-pictures/${user.image}` : null, 
+        image: user.image ? `${user.image}` : null, 
       });
 
     } catch (error) {

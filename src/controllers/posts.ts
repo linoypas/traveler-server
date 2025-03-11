@@ -16,17 +16,19 @@ class PostsController extends BaseController<IPost> {
     const userId = req.params.userId;
     const image = (req as any).file ? `/uploads/${(req as any).file.filename}` : null;
     const { title, content } = req.body;
-    const newPost = new postModel({
-      title: title,
-      content: content,
-      image: image,
-      owner: userId, 
-    });
-    console.log(newPost)
-   await newPost.save();
-
+    try{
+      const newPost = new postModel({
+        title: title,
+        content: content,
+        image: image,
+        owner: userId, 
+      });
+      await newPost.save();
+      res.status(201).send(newPost);
+    } catch (error) {
+      res.status(400).send(error);
+    }
   }
-
   async getAi(req: Request, res: Response) {
     const prompt = req.query.prompt ;
     const openai = new OpenAI();
