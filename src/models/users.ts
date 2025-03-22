@@ -2,11 +2,15 @@ import mongoose from "mongoose";
 
 export interface IUser {
   email: string;
-  password: string;
-  _id?: string;
+  password?: string; // Make password optional for Google login
   refreshToken?: string[];
   username: string;
-  image?:string;
+  image?: string;
+  _id: mongoose.Types.ObjectId;
+  googleId?: string;  
+}
+export interface IUserModel extends IUser, Document {
+  _id: mongoose.Types.ObjectId;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -17,7 +21,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   password: {
     type: String,
-    required: true,
+    required: false, // Make password optional for Google login
   },
   username: {
     type: String,
@@ -32,6 +36,11 @@ const userSchema = new mongoose.Schema<IUser>({
     type: [String],
     default: [],
   },
+  googleId: {  // Store Google OAuth ID in this field
+    type: String,
+    unique: true,
+  },
+
 });
 
 const userModel = mongoose.model<IUser>("Users", userSchema);

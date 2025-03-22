@@ -5,7 +5,13 @@ import jwt from "jsonwebtoken";
 import { Document } from "mongoose";
 import multer from "multer";
 import path from "path";
+import passport from "passport"; 
 import fs from 'fs';
+import mongoose from "mongoose";
+import { OAuth2Client } from 'google-auth-library';
+
+
+const client = new OAuth2Client();
 
 const uploadDir = path.join(__dirname, '../profile-pictures');
 if (!fs.existsSync(uploadDir)) {
@@ -35,6 +41,21 @@ const register = async (req: Request, res: Response) => {
 type tTokens = {
   accessToken: string;
   refreshToken: string;
+};
+
+const verifyGoogleToken = async (token: string) => {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID, 
+    });
+
+    const payload = ticket.getPayload();
+
+    return payload;
+  } catch (error) {
+    throw new Error('Invalid Google token');
+  }
 };
 
 const generateToken = (userId: string): tTokens | null => {
@@ -74,7 +95,7 @@ const login = async (req: Request, res: Response) => {
     }
     const validPassword = await bcrypt.compare(
       req.body.password,
-      user.password
+      user.password || ""
     );
     if (!validPassword) {
       res.status(403).send("wrong username or password");
@@ -84,7 +105,7 @@ const login = async (req: Request, res: Response) => {
       res.status(500).send("Server Error");
       return;
     }
-    const tokens = generateToken(user._id);
+    const tokens = generateToken(user._id.toString());
 
     if (!tokens) {
       res.status(500).send("Server Error");
@@ -109,7 +130,7 @@ const login = async (req: Request, res: Response) => {
 type tUser = Document<unknown, object, IUser> &
   IUser &
   Required<{
-    _id: string;
+    _id: mongoose.Types.ObjectId;
   }> & {
     __v: number;
   };
@@ -179,7 +200,7 @@ const refresh = async (req: Request, res: Response) => {
       res.status(400).send("fail");
       return;
     }
-    const tokens = generateToken(user._id);
+    const tokens = generateToken(user._id.toString());
 
     if (!tokens) {
       res.status(500).send("Server Error");
@@ -200,9 +221,82 @@ const refresh = async (req: Request, res: Response) => {
   }
 };
 
+const checkUsernameInDb = async(username: string) => {
+    const user = await userModel.findOne({ username });
+    return user !== null;
+}
+
+const generateUsernameWithSuffix = async(baseUsername: string) => {
+    if(await checkUsernameInDb(baseUsername)){
+        let suffix = 1;
+        let newUsername = `${baseUsername}${suffix}`;
+        
+        while (await checkUsernameInDb(newUsername)) {
+          suffix += 1;
+          newUsername = `${baseUsername}${suffix}`;
+        }
+        return newUsername;
+    } else{
+        return baseUsername; 
+    }
+  }
+
+
+const googleSignin = async (req: Request, res: Response): Promise<void> => {
+  const credential = req.body.token;
+  try {
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const email = payload?.email
+        const image = payload?.picture
+
+        if(email != null){
+            let user = await userModel.findOne({'email': email});
+            if (user == null) {
+                let username = (payload?.given_name + "_" +  payload?.family_name).toLowerCase();
+                const uniqueUsername = await generateUsernameWithSuffix(username);
+
+                user = await userModel.create(
+                    {
+                        'email': email,
+                        'profilePicture': image,
+                        'username': uniqueUsername,
+                        'password': '*'
+                });
+            }
+            const tokens = generateToken(user._id.toString());
+            if (!tokens) {
+                res.status(500).send('Server Error');
+                return;
+            }
+            if (!user.refreshToken) {
+                user.refreshToken = [];
+            }
+            user.refreshToken.push(tokens.refreshToken);
+            await user.save();
+            res.status(200).send(
+                {
+                    accessToken: tokens.accessToken,
+                    refreshToken: tokens.refreshToken,
+                    _id: user._id
+                });
+        }
+  } catch (err) {
+      console.error('Error during Google OAuth:', err);
+      res.status(400).send(err);
+  }
+}
+
+
+
+
 export default {
   register, 
   login,
   refresh,
   logout,
+  googleSignin
 };
