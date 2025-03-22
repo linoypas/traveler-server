@@ -29,6 +29,32 @@ class PostsController extends BaseController<IPost> {
       res.status(400).send(error);
     }
   }
+
+  async update(req: Request, res: Response) {
+    const itemId = req.params.id;
+    try {
+      const item = await this.model.findById(itemId);
+      if (!item) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+      if (req.body.title) {
+        item.title = req.body.title;
+      }
+      if (req.body.content) {
+        item.content = req.body.content;
+      }
+      if (req.file) {
+        item.image = `/uploads/${req.file.filename}`;
+      }
+      await item.save();
+      res.status(200).send(item);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  }
+
   async getAi(req: Request, res: Response) {
     const prompt = req.query.prompt ;
     const openai = new OpenAI();
