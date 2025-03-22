@@ -4,6 +4,8 @@ import path from "path";
 const router = express.Router();
 import authController from "../controllers/auth";
 import userController from "../controllers/user";
+import passport from 'passport';
+
 
 
 /**
@@ -215,5 +217,7 @@ router.post("/refresh", authController.refresh);
 router.get("/:id" ,userController.getById.bind(userController));
 
 router.put("/:id", upload.single("image"), userController.updateItem.bind(userController));
+
+router.post("/google", authController.googleSignin);
 
 export default router;
