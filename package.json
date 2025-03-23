@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/app.ts",
+    "dev": "cp .envdev .env && nodemon ./src/app.ts",
     "start": "tsc && NODE_ENV=production node ./dist/src/app.js",
     "test": "jest --detectOpenHandles --forceExit --runInBand",
     "testAuth": "jest --detectOpenHandles --forceExit auth.test.ts",
