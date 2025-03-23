@@ -1,4 +1,7 @@
 import initApp from "./server";
+import dotenv from "dotenv";
+dotenv.config();
+
 const port = process.env.PORT;
 import http from 'http'
 import fs from 'fs'

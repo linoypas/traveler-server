@@ -219,7 +219,6 @@ router.delete("/:id", authMiddleware, postsController.deleteItem.bind(postsContr
  *         description: Internal server error
  */
 
-router.put( "/:id", authMiddleware, postsController.updateItem.bind(postsController));
-
+router.put("/:id",authMiddleware,upload.single("image"), postsController.update.bind(postsController));
 
 export default router;
