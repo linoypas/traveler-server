@@ -10,5 +10,6 @@
       "resolveJsonModule": true,
       "noImplicitAny": false
     },
-    "lib": ["es2015"]
+    "lib": ["es2015"],
+
   }
