@@ -7,11 +7,6 @@ import fs from 'fs'
 import https from 'https'
 
 
-
-const options = {
-  key: fs.readFileSync(keyPath),
-  cert: fs.readFileSync(certPath)
-};
 initApp().then((app) => {
     if(process.env.NODE_ENV !== 'production') {
       console.log('developmnet')
