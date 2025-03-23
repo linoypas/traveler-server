@@ -8,7 +8,9 @@
     "test": "jest --detectOpenHandles --forceExit --runInBand",
     "testAuth": "jest --detectOpenHandles --forceExit auth.test.ts",
     "testPost": "jest --detectOpenHandles --forceExit posts.test.ts",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "prod": "cp .envprod .env && tsc -p tsconfig_prod.json && pm2 restart ecosystem.config.js --env production"
+
   },
   "repository": {
     "type": "git",
