@@ -10,7 +10,7 @@ import https from 'https'
 initApp().then((app) => {
     if(process.env.NODE_ENV !== 'production') {
       console.log('developmnet')
-    https.createServer(app).listen(process.env.PORT);
+    http.createServer(app).listen(process.env.PORT);
     }
     const option= {
       key: fs.readFileSync('./client-key.pem'),
