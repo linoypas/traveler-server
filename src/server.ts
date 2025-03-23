@@ -40,6 +40,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/',express.static("front"));
+app.get('/ui/*', (req, res) => { res.sendFile(path.join("front", 'index.html')); });
+
 
 app.use("/posts", postsRoute);
 app.use("/comments", commentsRoute);
