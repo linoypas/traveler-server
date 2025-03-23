@@ -4,6 +4,8 @@ import postsController from "../controllers/posts";
 import authMiddleware from "../common/auth_middleware";
 import uploadMiddleware from "../common/upload_middleware";
 import multer from "multer";
+import path from "path";
+
 
 /**
 * @swagger
@@ -144,7 +146,7 @@ router.get("/:id" ,postsController.getById.bind(postsController));
  */
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "uploads/");
+      cb(null, path.resolve(process.cwd(), 'public/uploads'));
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + "-" + file.originalname);

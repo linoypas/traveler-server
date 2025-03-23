@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   image: { 
     type: String, 
-    default: '/profile-pictures/default.png' 
+    default: '/public/profile-pictures/default.png' 
   },
   refreshToken: {
     type: [String],

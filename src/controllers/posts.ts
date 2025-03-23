@@ -14,7 +14,7 @@ class PostsController extends BaseController<IPost> {
 
   async create(req: Request, res: Response) {
     const userId = req.params.userId;
-    const image = (req as any).file ? `/uploads/${(req as any).file.filename}` : null;
+    const image = (req as any).file ? `/public/uploads/${(req as any).file.filename}` : null;
     const { title, content } = req.body;
     try{
       const newPost = new postModel({

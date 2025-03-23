@@ -13,7 +13,7 @@ import { OAuth2Client } from 'google-auth-library';
 
 const client = new OAuth2Client();
 
-const uploadDir = path.join(__dirname, '../profile-pictures');
+const uploadDir = path.resolve(process.cwd(), 'public/profile-pictures');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -24,7 +24,7 @@ const register = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const image = (req as any).file ? `/profile-pictures/${(req as any).file.filename}` : "/profile-pictures/default.png";
+    const image = (req as any).file ? `/public/profile-pictures/${(req as any).file.filename}` : "/public/profile-pictures/default.png";
 
     const user = await userModel.create({
       email: req.body.email,

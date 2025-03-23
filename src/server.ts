@@ -38,17 +38,24 @@ app.use(passport.session());
 app.use("/posts", postsRoute);
 app.use("/comments", commentsRoute);
 app.use("/auth", authRoutes);
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+const publicDir = path.resolve(process.cwd(), 'public');
+const uploadsDir = path.resolve(process.cwd(), 'public/uploads');
+const profilePicturesDir = path.resolve(process.cwd(), 'public/profile-pictures');
+
+app.use('/public', express.static(publicDir));
+app.use('/public/uploads', express.static(uploadsDir));
+app.use('/public/profile-pictures', express.static(profilePicturesDir));
+
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/profile-pictures", express.static(path.join(__dirname, "../profile-pictures")));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../uploads"));
-  },
+    cb(null, uploadsDir);
+    },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },

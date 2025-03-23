@@ -68,7 +68,7 @@ import passport from 'passport';
 */
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, "profile-pictures");
+      cb(null, path.resolve(process.cwd(), 'public/profile-pictures'));
     },
     filename: (req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`);
