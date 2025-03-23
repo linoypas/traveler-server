@@ -1,14 +1,12 @@
 import initApp from "./server";
 import dotenv from "dotenv";
 dotenv.config();
-import path from "path";
 const port = process.env.PORT;
 import http from 'http'
 import fs from 'fs'
 import https from 'https'
 
-const keyPath = path.join(__dirname, 'client-key.pem');
-const certPath = path.join(__dirname, 'client-cert.pem');
+
 
 const options = {
   key: fs.readFileSync(keyPath),
@@ -20,8 +18,8 @@ initApp().then((app) => {
     http.createServer(app).listen(process.env.PORT);
     }
     const option= {
-      key: fs.readFileSync(keyPath),
-    cert: fs.readFileSync(certPath)
+      key: fs.readFileSync('/home/st111/traveler-server/client-key.pem'),
+      cert: fs.readFileSync('/home/st111/traveler-server/client-cert.pem')
     };
     https.createServer(option, app).listen(process.env.PORT);
   });
