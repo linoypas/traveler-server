@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/app.ts",
-    "start": "tsc && node ./dist/src/app.js",
+    "start": "tsc && NODE_ENV=production node ./dist/src/app.js",
     "test": "jest --detectOpenHandles --forceExit --runInBand",
     "testAuth": "jest --detectOpenHandles --forceExit auth.test.ts",
     "testPost": "jest --detectOpenHandles --forceExit posts.test.ts",
