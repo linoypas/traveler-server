@@ -19,7 +19,7 @@ import session from "express-session";
 const app = express();
 app.use(
   cors({
-    origin: "https://node43.cs.colman.ac.il/",
+    origin: process.env.DOMAIN_BASE,
     credentials: true,
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization",
